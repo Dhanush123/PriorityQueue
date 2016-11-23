@@ -22,9 +22,8 @@ int main(){
   cout << "File: " << __FILE__ << endl;
 
   // programmer customizations go here
-  int n = 2000000; // THE STARTING PROBLEM SIZE (MAX 250 MILLION)
+  int n = 1000000; // THE STARTING PROBLEM SIZE (MAX 250 MILLION)
   int nReps = n / 100;
-  string bigOh = "O(n)"; // YOUR PREDICTION: O(n), O(n log n), or O(n squared)
 
   cout.setf(ios::fixed);
   cout.precision(4);
@@ -55,7 +54,7 @@ int main(){
     clock_t startTime = clock();
 
     for(int rep = 0; rep < nReps; rep++){
-      timeQ2.push(rand() % rep);
+      timeQ2.push(rand() % n);
     }
 
     // do something where n is the "size" of the problem
@@ -75,19 +74,15 @@ int main(){
     // compute timing results
     double elapsedSeconds = (double)(endTime - startTime) / CLOCKS_PER_SEC;
     double factor = pow(2.0, double(cycle));
-    if (cycle == 0)
-      elapsedSecondsNorm = elapsedSeconds;
-    else if (bigOh == "O(n)")
-      expectedSeconds = factor * elapsedSecondsNorm;
-    else if (bigOh == "O(n log n)")
-      expectedSeconds = factor * log(double(n)) / log(n / factor) * elapsedSecondsNorm;
-    else if (bigOh == "O(n squared)")
-      expectedSeconds = factor * factor * elapsedSecondsNorm;
+    if(cycle == 0){ 
+	elapsedSecondsNorm = elapsedSeconds;
+    }
+    expectedSeconds = log(double(n)) / log(n / factor) * elapsedSecondsNorm;
 
     // reporting block
     cout << elapsedSeconds;
-    if (cycle == 0) cout << " (expected " << bigOh << ')';
-    else cout << " (expected " << expectedSeconds << ')';
+    if (cycle == 0) cout << " (expected O(log n))";
+    else cout << " (expected: " << expectedSeconds << ')';
     cout << " for n=" << n << endl;
   }
 }

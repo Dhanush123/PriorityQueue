@@ -20,12 +20,14 @@ int main(){
   cout << "File: " << __FILE__ << endl;
 
   // programmer customization go here
-  int n = 100000; // THE STARTING PROBLEM SIZE (MAX 250 MILLION)
+  int n = 1000000; // THE STARTING PROBLEM SIZE (MAX 250 MILLION)
   const int nReps = n / 100; // one percent of starting n
 
   cout.setf(ios::fixed);
   cout.precision(4);
   double elapsedSecondsNorm = 0;
+  double expectedSeconds = 0;
+
   for(int cycle = 0; cycle < 4; cycle++, n*= 2){
     // problem setup goes here -- create a data structure of size n
     PriorityQueue<int> timeQ(n * 2);
@@ -47,7 +49,7 @@ int main(){
 
     // start the timer, do something, and stop the timer
     clock_t startTime = clock();
-    for(int rep = 0; rep < nReps; rep++){ //now poping the 1st PQ for timing purposes
+    for(int rep = 0; rep < nReps; rep++){ //now popping the 1st PQ for timing purposes
       timeQ.pop();
     }
 
@@ -64,17 +66,22 @@ int main(){
       assert(temp >= timeQ2.top());
     }
 
+    // cleanup if applicable
+
     // compute timing results
     double elapsedSeconds = (double)(endTime - startTime) / CLOCKS_PER_SEC;
     double factor = pow(2.0, double(cycle));
-    if(cycle == 0) elapsedSecondsNorm = elapsedSeconds;
-    double expectedSecondsLog = log(double(n)) / log(n / factor) * elapsedSecondsNorm;
+    if(cycle == 0){ 
+	elapsedSecondsNorm = elapsedSeconds;
+    }
+    expectedSeconds = log(double(n)) / log(n / factor) * elapsedSecondsNorm;
 
     // reporting block
     cout << elapsedSeconds;
-    if(cycle == 0) cout << " (expected)";
-    else cout << " (expected " << elapsedSecondsNorm << " to " << expectedSecondsLog << ')';
+    if (cycle == 0) cout << " (expected O(log n))";
+    else cout << " (expected: " << expectedSeconds << ')';
     cout << " for n=" << n << endl;
+
   }
   return 0;
 }
